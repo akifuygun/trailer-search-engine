@@ -1,15 +1,28 @@
 <?php
 include("functions.php");
+include "libs/tmdb/tmdb-api.php";
+include("libs/tmdb/config.php");
 
 $method = $_SERVER["REQUEST_METHOD"];
 
-if ($method == "GET") {
+if ($method == "GET" && !empty($_GET["q"])) {
+
+    $tmdb = new TMDB($cnf);
+    $movies = $tmdb->searchMovie($_GET["q"]);
+    $result = [];
+    $i = 0;
+    foreach($movies as $movie) {
+        $i++;
+        $result["movies"][] = [
+            "id" => $movie->getID(),
+            "title" => $movie->getTitle(),
+            "poster" => "https://image.tmdb.org/t/p/w600_and_h900_bestv2".$movie->getPoster(),
+            "trailers" => $movie->getTrailers()
+        ];
+	}
+    $result["count"] = $i;
+
     setHeader(200);
-    $result = [
-        "https://www.youtube.com/watch?v=3sN-DKevBuE",
-        "https://www.youtube.com/watch?v=81QOIjeElCA",
-        "https://www.youtube.com/watch?v=xgUe2Ssu7R8"
-    ];
     echo json_encode($result);
 } else {
     setHeader(400);
