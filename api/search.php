@@ -15,5 +15,4 @@ if ($method == "GET") {
     setHeader(400);
 }
 
-
 ?>

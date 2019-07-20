@@ -1,5 +1,23 @@
 /* Custom styles */
 
+body{
+    min-height: 100%;
+    background: white;
+    font-size: 14px;
+    font-family: 'PT Sans', sans-serif;
+}
 h1{
     font-size: 40px;
+}
+.red{
+    color: red;
+}
+footer{
+    background-color: aliceblue;
+    font-size: 13px;
+    color: black;
+}
+footer > a{
+    color: black;
+    text-decoration: underline;
 }
