@@ -37,7 +37,7 @@ if ($method == "GET" && !empty($_GET["id"])) {
         $client = new Google_Client();
         $client->setApplicationName(APP_NAME);
         $client->setDeveloperKey(YOUTUBE_TOKEN);
-        $youtube = new Google_Service_Youtube($client);
+        $youtube = new Google_Service_YouTube($client);
         $videos = $youtube->search->listSearch("id,snippet", ["q" => $movie->title." trailer", "order" => "relevance", "maxResults" => 10, "type" => "video"]);
         if (count($videos->items) > 0){
             $result["youtube"]["available"] = true;
