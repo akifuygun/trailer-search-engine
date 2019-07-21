@@ -1,7 +1,8 @@
 <?php
-include("functions.php");
-include "libs/tmdb/tmdb-api.php";
-include("libs/tmdb/config.php");
+require_once("functions.php");
+require_once("libs/tmdb/tmdb-api.php");
+require_once("libs/tmdb/config.php");
+require_once("libs/google-api/vendor/autoload.php");
 
 $method = $_SERVER["REQUEST_METHOD"];
 
@@ -31,6 +32,24 @@ if ($method == "GET" && !empty($_GET["id"])) {
             ],
             "description" => $movie->overview
         ];
+        $client = new Google_Client();
+        $client->setApplicationName("trailer-search-engine");
+        $client->setDeveloperKey("AIzaSyCy59aINVV1xEao_1Y_LKqfMP8xBIKsBsI");
+
+        $youtube = new Google_Service_Youtube($client);
+        $videos = $youtube->search->listSearch("id,snippet", ["q" => $movie->title." trailer", "order" => "relevance", "maxResults" => 10, "type" => "video"]);
+        if (count($videos->items) > 0){
+            $result["youtube"]["available"] = true;
+            foreach ($videos->items as $video) {
+                $result["youtube"]["videos"][] = [
+                    "name" => $video->snippet->title,
+                    "key" => $video->id->videoId
+                ];
+            }
+        } else {
+            $result["youtube"]["available"] = false;
+        }
+
     } else {
         $result = [
             "available" => false

@@ -12,7 +12,7 @@ if (!empty($_GET["id"])) {
 <head>
     <?php include("partials/head.php"); ?>
 </head>
-<body class="pb-5">
+<body class="pb-5"><pre><?php print_r($_SERVER);?></pre>
 <?php include("partials/form.php"); ?>
 <?php if ($movie->available) {?>
     <div class="container mt-5">
@@ -35,6 +35,17 @@ if (!empty($_GET["id"])) {
                 <p><b>Language: </b> <?=$movie->language;?> </p>
                 <p><b>Status: </b> <?=$movie->status;?> </p>
                 <p><b>Description: </b> <?=$movie->description;?> </p>
+                <p>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?=$_SERVER["REQUEST_SCHEME"]."://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];?>" target="_blank">
+                        <i class="fab fa-facebook fa-2x color-facebook"></i>
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?text=Check this trailers! <?=$_SERVER["REQUEST_SCHEME"]."://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];?>" target="_blank">
+                        <i class="fab fa-twitter fa-2x color-twitter d-inline-block mx-3"></i>
+                    </a>
+                    <a href="whatsapp://send?text=Check this trailers! <?=$_SERVER["REQUEST_SCHEME"]."://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];?>" data-action="share/whatsapp/share" target="_blank">
+                        <i class="fab fa-whatsapp fa-2x color-whatsapp"></i>
+                    </a>
+                </p>
             </div>
         </div>
         <ul class="nav nav-tabs mt-5">
@@ -42,10 +53,11 @@ if (!empty($_GET["id"])) {
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#tmdb-videos">TMDB Videos</a>
             </li>
-            <?php } ?>
+            <?php } if ($movie->youtube->available) {?>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#youtube-videos">Youtube Videos</a>
             </li>
+            <?php } ?>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#vimeo-videos">Vimeo Videos</a>
             </li>
@@ -65,8 +77,20 @@ if (!empty($_GET["id"])) {
                 <?php } } ?>
                 </div>
             </div>
+            <?php } if ($movie->youtube->available) {?>
+            <div class="tab-pane fade" id="youtube-videos">
+                <div class="row">
+                    <?php foreach ($movie->youtube->videos as $video) {?>
+                        <div class="col-6 mb-4">
+                            <h4><?=$video->name;?></h4>
+                            <div class="embed-container">
+                                <iframe src='https://www.youtube.com/embed/<?=$video->key;?>' frameborder="0" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
             <?php } ?>
-            <div class="tab-pane fade" id="youtube-videos">...</div>
             <div class="tab-pane fade" id="vimeo-videos">...</div>
         </div>
     </div>
