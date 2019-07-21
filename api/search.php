@@ -13,12 +13,15 @@ if ($method == "GET" && !empty($_GET["q"])) {
     $i = 0;
     foreach($movies as $movie) {
         $i++;
-        $result["movies"][] = [
-            "id" => $movie->getID(),
-            "title" => $movie->getTitle(),
-            "poster" => "https://image.tmdb.org/t/p/w600_and_h900_bestv2".$movie->getPoster(),
-            "trailers" => $movie->getTrailers()
-        ];
+        if (!empty($movie->getPoster())) {
+            $result["movies"][] = [
+                "id" => $movie->getID(),
+                "title" => $movie->getTitle(),
+                "poster" => "https://image.tmdb.org/t/p/w600_and_h900_bestv2" . $movie->getPoster(),
+                "trailers" => $movie->getTrailers(),
+                "year" => substr($movie->get("release_date"), 0, 4)
+            ];
+        }
 	}
     $result["count"] = $i;
 
