@@ -1,4 +1,11 @@
 <?php
+define("APP_NAME", "trailer-search-engine");
+define("YOUTUBE_TOKEN", "AIzaSyCy59aINVV1xEao_1Y_LKqfMP8xBIKsBsI");
+define("VIMEO_CLIENT_ID", "bb08e88bd87a5dc36ae9140395949e241cd6dd4b");
+define("VIMEO_CLIENT_SECRET", "ISUwe+11MBTGgubm2xf6B5Q3wFVTiT7H8GIuRyRPGPiSWfiV0zfl4099yy7PGm6h1l3aJTJ0fi7Xp8dv5jTD2qlOoFrS0Pgau4RPncyqHfOKOqwL9OGIj0sLifddsvSd");
+
+
+
 function httpStatus($code) {
     $status = array(
         100 => 'Continue',

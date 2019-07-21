@@ -3,6 +3,7 @@ require_once("functions.php");
 require_once("libs/tmdb/tmdb-api.php");
 require_once("libs/tmdb/config.php");
 require_once("libs/google-api/vendor/autoload.php");
+require_once("libs/vimeo/autoload.php");
 
 $method = $_SERVER["REQUEST_METHOD"];
 
@@ -32,10 +33,10 @@ if ($method == "GET" && !empty($_GET["id"])) {
             ],
             "description" => $movie->overview
         ];
-        $client = new Google_Client();
-        $client->setApplicationName("trailer-search-engine");
-        $client->setDeveloperKey("AIzaSyCy59aINVV1xEao_1Y_LKqfMP8xBIKsBsI");
 
+        $client = new Google_Client();
+        $client->setApplicationName(APP_NAME);
+        $client->setDeveloperKey(YOUTUBE_TOKEN);
         $youtube = new Google_Service_Youtube($client);
         $videos = $youtube->search->listSearch("id,snippet", ["q" => $movie->title." trailer", "order" => "relevance", "maxResults" => 10, "type" => "video"]);
         if (count($videos->items) > 0){
@@ -48,6 +49,22 @@ if ($method == "GET" && !empty($_GET["id"])) {
             }
         } else {
             $result["youtube"]["available"] = false;
+        }
+
+        $lib = new \Vimeo\Vimeo(VIMEO_CLIENT_ID, VIMEO_CLIENT_SECRET);
+        $token = $lib->clientCredentials(["public"]);
+        $lib->setToken($token["body"]["access_token"]);
+        $vimeo = $lib->request("/videos", ["query" => $movie->title." trailer", "per_page" => 10, "sort" => "relevant"], 'GET');
+        if (count($vimeo["body"]["data"]) > 0){
+            $result["vimeo"]["available"] = true;
+            foreach ($vimeo["body"]["data"] as $video) {
+                $result["vimeo"]["videos"][] = [
+                    "name" => $video["name"],
+                    "key" => substr($video["uri"],8)
+                ];
+            }
+        } else {
+            $result["vimeo"]["available"] = false;
         }
 
     } else {

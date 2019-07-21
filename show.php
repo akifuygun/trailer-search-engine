@@ -12,7 +12,7 @@ if (!empty($_GET["id"])) {
 <head>
     <?php include("partials/head.php"); ?>
 </head>
-<body class="pb-5"><pre><?php print_r($_SERVER);?></pre>
+<body class="pb-5">
 <?php include("partials/form.php"); ?>
 <?php if ($movie->available) {?>
     <div class="container mt-5">
@@ -57,10 +57,11 @@ if (!empty($_GET["id"])) {
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#youtube-videos">Youtube Videos</a>
             </li>
-            <?php } ?>
+            <?php } if ($movie->vimeo->available) {?>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#vimeo-videos">Vimeo Videos</a>
             </li>
+            <?php } ?>
         </ul>
         <div class="tab-content p-3 mb-5 border-left border-right border-bottom">
             <?php if ($movie->video->available) {?>
@@ -71,7 +72,7 @@ if (!empty($_GET["id"])) {
                     <div class="col-6 mb-4">
                         <h4><?=$video->name;?></h4>
                         <div class="embed-container">
-                            <iframe src='https://www.youtube.com/embed/<?=$video->key;?>' frameborder="0" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                            <iframe src="https://www.youtube.com/embed/<?=$video->key;?>" frameborder="0" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
                         </div>
                     </div>
                 <?php } } ?>
@@ -84,14 +85,27 @@ if (!empty($_GET["id"])) {
                         <div class="col-6 mb-4">
                             <h4><?=$video->name;?></h4>
                             <div class="embed-container">
-                                <iframe src='https://www.youtube.com/embed/<?=$video->key;?>' frameborder="0" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                                <iframe src="https://www.youtube.com/embed/<?=$video->key;?>" frameborder="0" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
                             </div>
                         </div>
                     <?php } ?>
                 </div>
             </div>
+            <?php } if ($movie->vimeo->available) {?>
+                <div class="tab-pane fade" id="vimeo-videos">
+                    <div class="row">
+                        <?php foreach ($movie->vimeo->videos as $video) {?>
+                            <div class="col-6 mb-4">
+                                <h4><?=$video->name;?></h4>
+                                <div class="embed-container">
+                                        <iframe src=https://player.vimeo.com/video/<?=$video->key;?>?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=152444" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
             <?php } ?>
-            <div class="tab-pane fade" id="vimeo-videos">...</div>
+
         </div>
     </div>
 <?php } else { ?>
